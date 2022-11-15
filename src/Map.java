@@ -10,10 +10,14 @@ public class Map extends Game {
 	private Entity entity1;
 	private int newPosition;
 	private int oldEveryonePosition;
-	private String[] trapMessages; ///
-	private String[] currentMessages;
-	private String[] shipyardMessages;
-	private String[] miscellaneousMessages;
+	private String[] trapMessages = { "It's a trap! Your boat has been sent back 2 tiles!", "Blistering barnacles! Your boat took 2 tiles back...",
+			"Your boat is forced to retreat 2 tiles back. Terrible day to be in the river...", "Slimy sea urchins! More traps! Your boat has to take 2 tiles back..." };
+	private String[] currentMessages = { "The current has favoured us! The boat has advanced 3 tiles ahead!", "Tides are turning to our advantage! The boat has sailed 3 tiles ahead!",
+			"A strong current has appeared! The boat has moved forward by 3 tiles.", "Ahoy there! The boat is pushed forward by 3 tiles." };
+	private String[] shipyardMessages = { "Boat repaired! 20 health points replenished, boat moves 1 tile ahead",
+			"These repairs should keep the boat in one piece. 20 health points replenished, boat advances by 1 tile.", "A shipyard! 20 health points replenished, boat moves 1 tile forward." };
+	private String[] waterMessages = { "Hello there! Your boat has stopped on the same tile with another player.", "Your boat is now on the same tile with another player. This is awkward.",
+			"Shiver me timbers, it's a Kraken! Oh nevermind, it's just another boat. Your boat is now sharing the same tile with another player." };
 
 	// Test instances, delete in final version
 	private Entity everyone1;
@@ -26,7 +30,7 @@ public class Map extends Game {
 		shipyardCount = 5;
 		setBlankMap();
 		entity1 = new Entity(int trapCount, int currentCount, int shipyardCount);
-		addEntities(int trapCount, int currentCount, int shipyardCount, int[] entityPositions); ///
+		addEntities();
 	}
 
 	public Map(int trapCount, int currentCount, int shipyardCount) {
@@ -35,44 +39,28 @@ public class Map extends Game {
 		this.shipyardCount = shipyardCount;
 		setBlankMap();
 		entity1 = new Entity(int trapCount, int currentCount, int shipyardCount);
-		addEntities(int trapCount, int currentCount, int shipyardCount, int[] entityPositions); ///
+		addEntities();
 	}
 
 	private void setBlankMap() { // populates mapList with objects
 		mapView.add(new Start());
-		mapView.add(new Everyone());
+		mapView.add(everyone1);
 		for (int a = 0; a < 99; a++) {
 			mapView.add(new Water());
 		}
 		mapView.add(new End());
 	}
 
-	private void addEntities(int trapCount, int currentCount, int shipyardCount, int[] entity1.getEntityPositions()) { // places traps, currents and shipyards randomly onto 
+	private void addEntities() { // places traps, currents and shipyards randomly on the map
 		for (int i = 0; i < trapCount; i++) {
-			mapView.set((entity1.getEntityPositions())[i], new Trap());
+			mapView.set(entity1.getEntityPositions()[i], new Trap());
 		}
 		for (int j = trapCount; j < trapCount + currentCount; j++) {
-			mapView.set((entity1.getEntityPositions())[j],  new Current());
+			mapView.set(entity1.getEntityPositions()[j], new Current());
 		}
 		for (int k = trapCount + currentCount; k < trapCount + currentCount + shipyardCount; k++) {
-			mapView.set((entity1.getEntityPositions())[k],  new Shipyard());
+			mapView.set(entity1.getEntityPositions()[k], new Shipyard());
 		}
-		// Alternative
-//		private int lowerLimit = 0;
-//		private int upperLimit = trapCount;
-//		for (int i = lowerLimit; i < upperLimit; i++) {
-//			mapView.set(i, new Trap());
-//		}
-//		lowerLimit += trapCount;
-//		upperLimit += currentCount;
-//		for (int j = lowerLimit; j < upperLimit; j++) {
-//			mapView.set(j,  new Current());
-//		}
-//		lowerLimit += currentCount;
-//		upperLimit += shipyardCount;
-//		for (int k = lowerLimit; k < upperLimitt; k++) {
-//			mapView.set(k,  new Shipyard());
-//		}
 	}
 
 	public int getMapLength() {
