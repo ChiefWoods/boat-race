@@ -1,26 +1,32 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
-import javax.tools.DocumentationTool.Location;
-
-public class Map {
+public class Map extends Game {
 	private static int mapLength = 100;
-	private ArrayList<Location> mapView;
+	private ArrayList<Entity> mapView;
 	private int trapCount;
 	private int currentCount;
 	private int shipyardCount;
-	private Location locations1;
-	private String[] trapMessages;
+	private Entity entity1;
+	private int newPosition;
+	private int oldEveryonePosition;
+	private String[] trapMessages; ///
 	private String[] currentMessages;
 	private String[] shipyardMessages;
 	private String[] miscellaneousMessages;
+
+	// Test instances, delete in final version
+	private Entity everyone1;
+	private Object player1, player2;
+	private int playerTurn = 1;
 
 	public Map() {
 		trapCount = 15;
 		currentCount = 15;
 		shipyardCount = 5;
 		setBlankMap();
-		locations1 = new Location(int trapCount, int currentCount, int shipyardCount);
-		addLocations(int trapCount, int currentCount, int shipyardCount, int[] locations1.getLocationPositions());
+		entity1 = new Entity(int trapCount, int currentCount, int shipyardCount);
+		addEntities(int trapCount, int currentCount, int shipyardCount, int[] entityPositions); ///
 	}
 
 	public Map(int trapCount, int currentCount, int shipyardCount) {
@@ -28,27 +34,28 @@ public class Map {
 		this.currentCount = currentCount;
 		this.shipyardCount = shipyardCount;
 		setBlankMap();
-		locations1 = new Location(int trapCount, int currentCount, int shipyardCount);
-		addLocations(int trapCount, int currentCount, int shipyardCount, int[] locations1.getLocationPositions());
+		entity1 = new Entity(int trapCount, int currentCount, int shipyardCount);
+		addEntities(int trapCount, int currentCount, int shipyardCount, int[] entityPositions); ///
 	}
 
-	private void setBlankMap() {
+	private void setBlankMap() { // populates mapList with objects
 		mapView.add(new Start());
-		for (int a = 0; a < 100; a++) {
+		mapView.add(new Everyone());
+		for (int a = 0; a < 99; a++) {
 			mapView.add(new Water());
 		}
 		mapView.add(new End());
 	}
 
-	private void addLocations(int trapCount, int currentCount, int shipyardCount, int[] location1.getLocationPositions()) {
+	private void addEntities(int trapCount, int currentCount, int shipyardCount, int[] entity1.getEntityPositions()) { // places traps, currents and shipyards randomly onto 
 		for (int i = 0; i < trapCount; i++) {
-			mapView.set((location1.getLocationPositions())[i], new Trap());
+			mapView.set((entity1.getEntityPositions())[i], new Trap());
 		}
 		for (int j = trapCount; j < trapCount + currentCount; j++) {
-			mapView.set((location1.getLocationPositions())[j],  new Current());
+			mapView.set((entity1.getEntityPositions())[j],  new Current());
 		}
 		for (int k = trapCount + currentCount; k < trapCount + currentCount + shipyardCount; k++) {
-			mapView.set((location1.getLocationPositions())[k],  new Shipyard());
+			mapView.set((entity1.getEntityPositions())[k],  new Shipyard());
 		}
 		// Alternative
 //		private int lowerLimit = 0;
@@ -67,48 +74,68 @@ public class Map {
 //			mapView.set(k,  new Shipyard());
 //		}
 	}
-	
+
 	public int getMapLength() {
 		return mapLength;
 	}
-	
+
 	public void setMapLength(int length) {
 		mapLength = length;
 	}
-	
-	public ArrayList<Location> getMapView() {
+
+	public ArrayList<Entity> getMapView() {
 		return mapView;
 	}
-	
-	public void setMapView(ArrayList<Location> mapView, Player player) {
-		
+
+	public void setMapView(ArrayList<Entity> mapView, Player player) { // changes mapList according to player positions
+		newPosition = 1 + player.getPlayerPosition();
+		oldEveryonePosition = mapView.indexOf(everyone1);
+		if (mapView.indexOf(everyone1) != -1) { // if all boats have converged on the previous tile
+			if (playerTurn == 1) {
+				mapView.set(oldEveryonePosition, player2);
+			} else {
+				mapView.set(oldEveryonePosition, player1);
+			}
+			if (mapView.get(newPosition) instanceof Water) { // if new position has no other boats
+				mapView.set(newPosition, player);
+			} else { // if new position has another boat
+				mapView.set(newPosition, everyone1);
+			}
+		} else { // if only one boat exists on the previous tile
+			mapView.set(oldEveryonePosition, new Water());
+			if (mapView.get(newPosition) instanceof Water) { // if new position has no other boats
+				mapView.set(newPosition, player);
+			} else { // if new position has another boat
+				mapView.set(newPosition, everyone1);
+			}
+		}
 	}
-	
+
 	public int getTrapCount() {
 		return trapCount;
 	}
-	
+
 	public void setTrapCount(int traps) {
 		trapCount = traps;
 	}
-	
+
 	public int getCurrentCount() {
 		return currentCount;
 	}
-	
+
 	public void setCurrentCount(int currents) {
 		currentCount = currents;
 	}
-	
+
 	public int getShipyardCount() {
 		return shipyardCount;
 	}
-	
+
 	public void setShipyardCount(int shipyards) {
 		shipyardCount = shipyards;
 	}
-	
+
 	public String toString() {
-		return String.format("", ); // display mapView spaced out
+		return String.format(" %s ", Arrays.toString(mapView.toArray())); // displays mapView spaced out
 	}
 }
