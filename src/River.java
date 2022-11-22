@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Map extends Game {
-	private static int mapLength = 100;
-	private ArrayList<Entity> mapView;
+public class River extends Game {
+	private static int riverLength = 100;
+	private ArrayList<Entity> riverView;
 	private int trapCount;
 	private int currentCount;
 	private int shipyardCount;
@@ -24,77 +24,77 @@ public class Map extends Game {
 	private Object player1, player2;
 	private int playerTurn = 1;
 
-	public Map() {
+	public River() {
 		trapCount = 15;
 		currentCount = 15;
 		shipyardCount = 5;
-		setBlankMap();
+		setBlankRiver();
 		entity1 = new Entity(int trapCount, int currentCount, int shipyardCount);
 		addEntities();
 	}
 
-	public Map(int trapCount, int currentCount, int shipyardCount) {
+	public River(int trapCount, int currentCount, int shipyardCount) {
 		this.trapCount = trapCount;
 		this.currentCount = currentCount;
 		this.shipyardCount = shipyardCount;
-		setBlankMap();
+		setBlankRiver();
 		entity1 = new Entity(int trapCount, int currentCount, int shipyardCount);
 		addEntities();
 	}
 
-	private void setBlankMap() { // populates mapList with objects
-		mapView.add(new Start());
-		mapView.add(everyone1);
+	private void setBlankRiver() { // populates riverList with objects
+		riverView.add(new Start());
+		riverView.add(everyone1);
 		for (int a = 0; a < 99; a++) {
-			mapView.add(new Water());
+			riverView.add(new Water());
 		}
-		mapView.add(new End());
+		riverView.add(new End());
 	}
 
-	private void addEntities() { // places traps, currents and shipyards randomly on the map
+	private void addEntities() { // places traps, currents and shipyards randomly on the river
 		for (int i = 0; i < trapCount; i++) {
-			mapView.set(entity1.getEntityPositions()[i], new Trap());
+			riverView.set(entity1.getEntityPositions()[i], new Trap());
 		}
 		for (int j = trapCount; j < trapCount + currentCount; j++) {
-			mapView.set(entity1.getEntityPositions()[j], new Current());
+			riverView.set(entity1.getEntityPositions()[j], new Current());
 		}
 		for (int k = trapCount + currentCount; k < trapCount + currentCount + shipyardCount; k++) {
-			mapView.set(entity1.getEntityPositions()[k], new Shipyard());
+			riverView.set(entity1.getEntityPositions()[k], new Shipyard());
 		}
 	}
 
-	public int getMapLength() {
-		return mapLength;
+	public int getRiverLength() {
+		return riverLength;
 	}
 
-	public void setMapLength(int length) {
-		mapLength = length;
+	public void setRiverLength(int length) {
+		riverLength = length;
 	}
 
-	public ArrayList<Entity> getMapView() {
-		return mapView;
+	public ArrayList<Entity> getRiverView() {
+		return riverView;
 	}
 
-	public void setMapView(ArrayList<Entity> mapView, Player player) { // changes mapList according to player positions
+	public void setRiverView(ArrayList<Entity> riverView, Player player) { // changes riverList according to player positions
 		newPosition = 1 + player.getPlayerPosition();
-		oldEveryonePosition = mapView.indexOf(everyone1);
-		if (mapView.indexOf(everyone1) != -1) { // if all boats have converged on the previous tile
+		oldEveryonePosition = riverView.indexOf(everyone1);
+		if (riverView.indexOf(everyone1) != -1) { // if all boats have converged on the previous tile
 			if (playerTurn == 1) {
-				mapView.set(oldEveryonePosition, player2);
+				riverView.set(oldEveryonePosition, player2);
 			} else {
-				mapView.set(oldEveryonePosition, player1);
+				riverView.set(oldEveryonePosition, player1);
 			}
-			if (mapView.get(newPosition) instanceof Water) { // if new position has no other boats
-				mapView.set(newPosition, player);
+			if (riverView.get(newPosition) instanceof Water) { // if new position has no other boats
+				riverView.set(newPosition, player);
 			} else { // if new position has another boat
-				mapView.set(newPosition, everyone1);
+				riverView.set(newPosition, everyone1);
 			}
 		} else { // if only one boat exists on the previous tile
-			mapView.set(oldEveryonePosition, new Water());
-			if (mapView.get(newPosition) instanceof Water) { // if new position has no other boats
-				mapView.set(newPosition, player);
+			riverView.set(oldEveryonePosition, new Water());
+			if (riverView.get(newPosition) instanceof Water) { // if new position has no other boats
+				riverView.set(newPosition, player);
 			} else { // if new position has another boat
-				mapView.set(newPosition, everyone1);
+				riverView.set(newPosition, everyone1);
 			}
 		}
 	}
@@ -124,6 +124,6 @@ public class Map extends Game {
 	}
 
 	public String toString() {
-		return String.format(" %s ", Arrays.toString(mapView.toArray())); // displays mapView spaced out
+		return String.format(" %s ", Arrays.toString(riverView.toArray())); // displays riverView spaced out
 	}
 }
