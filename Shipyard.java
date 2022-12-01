@@ -1,7 +1,8 @@
 
-public class Shipyard {
+public class Shipyard extends Entity{
 	//constructor
-		public Shipyard() {
+		public Shipyard(int position) {
+			super(position);
 		}
 		
 		public String toString() {
