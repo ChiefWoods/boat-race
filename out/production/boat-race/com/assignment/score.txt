@@ -1,5 +1,6 @@
-sugu 45
-coming 42
-syehrran 47
 cy 40
+coming 42
+sugu 45
+syehrran 47
 morris 50
+yong 37

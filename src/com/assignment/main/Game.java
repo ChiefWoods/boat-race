@@ -7,7 +7,7 @@ import com.assignment.object.Scoreboard;
 
 import java.util.Scanner;
 
-public class Main {
+public class Game {
     //Attributes
     public static Scanner input = new Scanner(System.in);
     public static River river;
