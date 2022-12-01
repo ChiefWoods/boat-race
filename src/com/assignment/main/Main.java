@@ -3,6 +3,7 @@ package com.assignment.main;
 import com.assignment.object.Dice;
 import com.assignment.object.Player;
 import com.assignment.object.River;
+import com.assignment.object.Scoreboard;
 
 import java.util.Scanner;
 
@@ -25,7 +26,11 @@ public class Main {
     static int count = 0;
     static int movement;
 
+    public static Scoreboard scoreboard = new Scoreboard();
+
     public static void main(String[] args) {
+
+
 
         userInput = "0";
         while (userInput.equals("0")) {
@@ -53,15 +58,30 @@ public class Main {
             }
         }
 
-        //TODO Record Score
-        //use: { (int) count/2 } to get score
-        //because 2 count = 1 round
+        //Record Winner Score
+        if (player1.getPosition() == 99) {
+            player1.setScore(count);
+            scoreboard.addPlayer(player1);
+        } else if (player2.getPosition() == 99) {
+            player2.setScore(count);
+            scoreboard.addPlayer(player2);
+        }
+
+        //print out score board
+        scoreboard.saveScores();
+        scoreboard.sortTopScore();
+        System.out.println(scoreboard.toString());
+
+
     }
 
     public static void create() {
 
-        //TODO: Read txt file and print out top 5 player score
-        //print the lowest count score because he use the lowest count to get win
+        //Read txt file and print out top 5 player score
+        scoreboard = new Scoreboard();
+        scoreboard.loadScores();
+        scoreboard.sortTopScore();
+        System.out.println(scoreboard.toString());
 
         //Ask 2 player name
         System.out.print("\nName for player 1: ");
@@ -81,7 +101,11 @@ public class Main {
 
     public static void createSandBox() {
 
-        //TODO: Read txt file and print out top 5 player score
+        //Read txt file and print out top 5 player score
+        scoreboard = new Scoreboard();
+        scoreboard.loadScores();
+        scoreboard.sortTopScore();
+        System.out.println(scoreboard.toString());
 
         //Ask 2 player name
         System.out.print("\nName for player 1: ");
@@ -131,7 +155,7 @@ public class Main {
             } else {
                 river.check(player1);
 
-                if (player1.getHp() > 0) {
+                if (player1.getHP() > 0) {
                     System.out.println(river.draw());
                 } else {
                     player2.setPosition(99);       //if player 1 negative hp let player 2 win
@@ -146,7 +170,7 @@ public class Main {
                 System.out.println("Player 2 Won");
             } else {
                 river.check(player2);
-                if (player2.getHp() > 0) {
+                if (player2.getHP() > 0) {
                     System.out.println(river.draw());
                 } else {
                     player1.setPosition(99);      //if player 2 negative hp let player 1 win

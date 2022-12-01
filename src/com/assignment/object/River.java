@@ -122,8 +122,8 @@ public class River {
                     } else if (entityList.get(i) instanceof Trap) {
                         System.out.printf("%s hit a %s %s\n", player.getName(), ((Trap) entityList.get(i)).getLevel(), "Trap");
                         player.damage();
-                        System.out.printf("%s Hp: %d\n", player, player.getHp());
-                        if (player.getHp() < 0) {
+                        System.out.printf("%s Hp: %d\n", player, player.getHP());
+                        if (player.getHP() < 0) {
                             player.setPosition(0);    //To avoid the while loop keep looping
                             System.out.printf("GG, %s lose\n", player);
                         } else {
@@ -132,7 +132,7 @@ public class River {
                     } else if (entityList.get(i) instanceof Shipyard) {
                         System.out.printf("%s hit a %s\n", player.getName(), "Shipyard");
                         player.repair();
-                        System.out.printf("%s Hp: %d\n", player, player.getHp());
+                        System.out.printf("%s Hp: %d\n", player, player.getHP());
                         visitedShipyard = true;
                     }
                 }
