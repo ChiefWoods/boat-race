@@ -1,0 +1,5 @@
+cy 40
+coming 42
+sugu 45
+syehrran 47
+morris 50
