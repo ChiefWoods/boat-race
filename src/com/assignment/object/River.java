@@ -35,17 +35,17 @@ public class River {
         }
 
         //Generate trap
-        for (int j = 0; j < 15; j++) {
+        for (int j = 0; j < 10; j++) {
             entityList.add(new Trap(generateRandomPosition()));
         }
 
         //Generate current
-        for (int k = 0; k < 15; k++) {
+        for (int k = 0; k < 10; k++) {
             entityList.add(new Current(generateRandomPosition()));
         }
 
         //Generate Shipyard
-        for (int l = 0; l < 10; l++) {
+        for (int l = 0; l < 5; l++) {
             entityList.add(new Shipyard(generateRandomPosition()));
         }
     }
@@ -106,40 +106,37 @@ public class River {
     }
 
     public void check(Player player) {
-        while (entityPositionList.contains(player.getPosition())) {
 
-            entityList.forEach(entity -> {
-                if (player.getPosition() == entity.getPosition()) {
-                    if (entity instanceof Current) {
-                        System.out.printf("%s hit a %s %s\n", player.getName(), ((Current) entity).getLevel(), "Current");
-                        if (player.getPosition() + ((Current) entity).getMovement() < 100) {
-                            player.move(((Current) entity).getMovement());
+        boolean visitedShipyard = false;
+        while (entityPositionList.contains(player.getPosition()) && !visitedShipyard) {
+
+            for (int i = 0; i < entityList.size(); i++) {
+                if (player.getPosition() == entityList.get(i).getPosition()) {
+                    if (entityList.get(i) instanceof Current) {
+                        System.out.printf("%s hit a %s %s\n", player.getName(), ((Current) entityList.get(i)).getLevel(), "Current");
+                        if (player.getPosition() + ((Current) entityList.get(i)).getMovement() < 100) {
+                            player.move(((Current) entityList.get(i)).getMovement());
                         } else {
-                            player.setPosition(100);    //set to last position to avoid out of index
+                            player.setPosition(99);    //set to last position to avoid out of index
                         }
-                    } else if (entity instanceof Trap) {
-                        System.out.printf("%s hit a %s %s\n", player.getName(), ((Trap) entity).getLevel(), "Trap");
+                    } else if (entityList.get(i) instanceof Trap) {
+                        System.out.printf("%s hit a %s %s\n", player.getName(), ((Trap) entityList.get(i)).getLevel(), "Trap");
                         player.damage();
                         System.out.printf("%s Hp: %d\n", player, player.getHp());
                         if (player.getHp() < 0) {
                             player.setPosition(0);    //To avoid the while loop keep looping
                             System.out.printf("GG, %s lose\n", player);
                         } else {
-                            player.move(((Trap) entity).getMovement());
+                            player.move(((Trap) entityList.get(i)).getMovement());
                         }
-                    } else if (entity instanceof Shipyard) {
+                    } else if (entityList.get(i) instanceof Shipyard) {
                         System.out.printf("%s hit a %s\n", player.getName(), "Shipyard");
                         player.repair();
                         System.out.printf("%s Hp: %d\n", player, player.getHp());
-
-                        if (player.getPosition() + ((Shipyard) entity).getMovement() < 100) {
-                            player.move(((Shipyard) entity).getMovement());
-                        } else {
-                            player.setPosition(100);    //set to last position to avoid out of index
-                        }
+                        visitedShipyard = true;
                     }
                 }
-            });
+            }
         }
     }
 
@@ -148,7 +145,7 @@ public class River {
         randomEntityP = rd.nextInt(riverMap.size());
 
         // to avoid entity overlapping and the starting point.
-        while (entityPositionList.contains(randomEntityP) || randomEntityP < 10) {
+        while (entityPositionList.contains(randomEntityP) || randomEntityP < 10 || randomEntityP > riverMap.size()- 10) {
             randomEntityP = rd.nextInt(riverMap.size());
         }
 

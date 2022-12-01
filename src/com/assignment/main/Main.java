@@ -43,7 +43,7 @@ public class Main {
 
 
         //Play game
-        while (player1.getPosition() < 100 && player2.getPosition() < 100) {
+        while (player1.getPosition() < 99 && player2.getPosition() < 99) {
             System.out.println("Click enter to roll a dice or 'quit' to end the game!");
             userInput = input.nextLine();
             if (userInput.toLowerCase().equals("quit")) {
@@ -89,20 +89,20 @@ public class Main {
         System.out.print("\nName for player 2: ");
         player2Name = input.nextLine();
 
-        currentAmount = 0;
-        trapAmount = 0;
-        shipyardAmount = 0;
+        currentAmount = -1;
+        trapAmount = -1;
+        shipyardAmount = -1;
 
-        while (currentAmount < 1 || currentAmount > 30) {
-            System.out.print("\nAmount for Current(1~30): ");
+        while (currentAmount < 0 || currentAmount > 20) {
+            System.out.print("\nAmount for Current(0~20): ");
             currentAmount = input.nextInt();
         }
-        while (trapAmount < 1 || trapAmount > 30) {
-            System.out.print("\nAmount for Trap(1~30): ");
+        while (trapAmount < 0 || trapAmount > 20) {
+            System.out.print("\nAmount for Trap(0~20): ");
             trapAmount = input.nextInt();
         }
-        while (shipyardAmount < 1 || shipyardAmount > 30) {
-            System.out.print("\nAmount for Shipyard(1~30): ");
+        while (shipyardAmount < 0 || shipyardAmount > 20) {
+            System.out.print("\nAmount for Shipyard(0~20): ");
             shipyardAmount = input.nextInt();
         }
 
@@ -124,7 +124,9 @@ public class Main {
         if (turn == 1) {
             System.out.println(player1.getName() + "'s turn: \nDice attempt: " + movement);
             player1.move(movement);
-            if (player1.getPosition() >= 100) {
+            if (player1.getPosition() >= 99) {
+                player1.setPosition(99);
+                System.out.println(river.draw());
                 System.out.println("Player 1 Won");
             } else {
                 river.check(player1);
@@ -132,20 +134,22 @@ public class Main {
                 if (player1.getHp() > 0) {
                     System.out.println(river.draw());
                 } else {
-                    player2.setPosition(100);       //if player 1 negative hp let player 2 win
+                    player2.setPosition(99);       //if player 1 negative hp let player 2 win
                 }
             }
         } else if (turn == 2) {
             System.out.println(player2.getName() + "'s turn: \nDice attempt: " + movement);
             player2.move(movement);
-            if (player2.getPosition() >= 100) {
+            if (player2.getPosition() >= 99) {
+                player2.setPosition(99);
+                System.out.println(river.draw());
                 System.out.println("Player 2 Won");
             } else {
                 river.check(player2);
                 if (player2.getHp() > 0) {
                     System.out.println(river.draw());
                 } else {
-                    player1.setPosition(100);      //if player 2 negative hp let player 1 win
+                    player1.setPosition(99);      //if player 2 negative hp let player 1 win
                 }
             }
         }

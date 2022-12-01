@@ -12,6 +12,7 @@ public class Player {
         this.name = name;
         this.score = 0;
         this.hp = 100;
+        this.position = 0;
     }
 
     public void move(int step) {
