@@ -15,17 +15,18 @@ public class Game {
 	public static Player player2;
 	public static String player1Name;
 	public static String player2Name;
+	public static Scoreboard scoreboard = new Scoreboard();
 
 	public static int currentAmount;
 	public static int trapAmount;
 	public static int shipyardAmount;
 
+	public static boolean isSandboxMode = false;
+
 	static String userInput;
 
 	static int count = 0;
 	static int movement;
-
-	public static Scoreboard scoreboard = new Scoreboard();
 
 	public static void main(String[] args) {
 		scoreboard = new Scoreboard();
@@ -41,6 +42,7 @@ public class Game {
 				break;
 			case "2":
 				createSandBox();
+				isSandboxMode = true;
 				break;
 			case "3":
 				System.out.println(scoreboard.toString());
@@ -60,7 +62,7 @@ public class Game {
 				System.out.println("It's " + player2.getName() + "'s turn!");
 			}
 			System.out.print("Enter any key to roll the dice! Type 'quit' to stop the game.\nEnter key: ");
-			userInput = input.nextLine();
+			userInput = input.next();
 			if (userInput.equalsIgnoreCase("quit")) {
 				System.out.println("\nTerminating game...\nThanks for playing!");
 				break;
@@ -72,13 +74,21 @@ public class Game {
 		// Records scores of player who won
 		if (player1.getPosition() == 99) {
 			player1.setScore(count);
-			scoreboard.updateTopScores(player1);
+			if (!isSandboxMode) {
+				scoreboard.updateTopScores(player1);
+			}
 		} else if (player2.getPosition() == 99) {
 			player2.setScore(count);
-			scoreboard.updateTopScores(player2);
+			if (!isSandboxMode) {
+				scoreboard.updateTopScores(player2);
+			}
 		}
-		
-		System.out.printf("\nScores\n%s --- %d\n%s --- %d\n", player1.getName(), player1.getScore(), player2.getName(), player2.getScore());
+
+		System.out.printf("\nScores (Moves Taken)\n%s --- %d\n%s --- %d\n", player1.getName(), player1.getScore(), player2.getName(), player2.getScore());
+
+		if (isSandboxMode) {
+			System.out.println("\nScores in Sandbox Mode are not eligible for the leaderboard.");
+		}
 
 		// Updates and displays high scores
 		scoreboard.saveScores();
@@ -98,7 +108,7 @@ public class Game {
 		player2 = new Player(2, player2Name);
 		river = new River(player1, player2);
 
-		// Display river view
+		// Displays river view
 		System.out.printf("%s\n", river.draw());
 	}
 
@@ -114,15 +124,15 @@ public class Game {
 		shipyardAmount = -1;
 
 		while (currentAmount < 0 || currentAmount > 20) {
-			System.out.print("\nChoose amount of Currents to be generated (0-20): ");
+			System.out.print("\nEnter amount of Currents to be generated (0-20): ");
 			currentAmount = input.nextInt();
 		}
 		while (trapAmount < 0 || trapAmount > 20) {
-			System.out.print("\nChoose amount of Traps to be generated (0-20): ");
+			System.out.print("\nEnter amount of Traps to be generated (0-20): ");
 			trapAmount = input.nextInt();
 		}
 		while (shipyardAmount < 0 || shipyardAmount > 20) {
-			System.out.print("\nChoose amount of Shipyards to be generated (0-20): ");
+			System.out.print("\nEnter amount of Shipyards to be generated (0-20): ");
 			shipyardAmount = input.nextInt();
 		}
 
@@ -131,12 +141,12 @@ public class Game {
 		player2 = new Player(2, player2Name);
 		river = new River(player1, player2, currentAmount, trapAmount, shipyardAmount);
 
-		// Display river view
-		System.out.println(river.draw());
+		// Displays river view
+		System.out.printf("%s\n", river.draw());
 	}
 
 	public static void play(int turn) {
-		// Roll the dice
+		// Rolls the dice
 		movement = Dice.roll();
 		count += 1;
 
