@@ -112,7 +112,8 @@ public class Scoreboard {
 	private String filePath = "src/com/assignment/score.txt";
 
 	public Scoreboard() {
-
+		this.loadScores();
+		this.sortTopScores();
 	}
 
 	public void loadScores() {
@@ -127,7 +128,6 @@ public class Scoreboard {
 			player.setName(input.next());
 			player.setScore(input.nextInt());
 			topScores.add(player);
-//			topScores.forEach(x -> System.out.printf("%s %d\n", x.getName(), x.getScore())); ***testing purposes***
 		}
 		closeInput(input);
 	}
@@ -146,8 +146,8 @@ public class Scoreboard {
 			System.err.println("Error reading from file.");
 			System.exit(1);
 		}
-		for (Player topScorer : topScores) {
-			output.format("%s %d\n", topScorer.getName(), topScorer.getScore());
+		for (int j = 0; j < 5; j++) {
+			output.format("%s %d\n", topScores.get(j).getName(), topScores.get(j).getScore());
 		}
 		closeOutput(output);
 	}
@@ -156,25 +156,22 @@ public class Scoreboard {
 		for (int i = 0; i < topScores.size(); i++) {
 			if (newPlayer.getScore() > topScores.get(i).getScore()) {
 				topScores.add(i, newPlayer);
-				if (topScores.size() > 5) {
-					topScores.remove(5);
-				}
+				trimTopScores();
 				break;
 			}
 		}
 	}
 	
 	public void sortTopScores() {
-//		System.out.println("testing sort"); ***testing purposes***
 		Collections.sort(topScores, Comparator.comparing(Player::getScore));
-//		Collections.sort(topScores, new Comparator<Player>() {
-//			@Override
-//			public int compare(Player o1, Player o2) {
-//				return Integer.valueOf(o2.getScore()).compareTo(o1.getScore());
-//			}
-//		});
-		// ***delete later***
 		Collections.reverse(topScores);
+		trimTopScores();
+	}
+	
+	public void trimTopScores() {
+		while (topScores.size() > 5) {
+			topScores.remove(5);
+		}
 	}
 
 	public void closeInput(Scanner input) {

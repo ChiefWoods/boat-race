@@ -29,22 +29,12 @@ public class Game {
 
 	public static void main(String[] args) {
 		scoreboard = new Scoreboard();
-		scoreboard.loadScores();
-		scoreboard.sortTopScores();
-
 		userInput = "0";
 		System.out.println("Welcome to Boat Race!");
+		System.out.println("The goal of the game is to be the first boat to reach the end of the river, or be the last boat standing!");
 		while (userInput.equals("0")) {
-			System.out.print("\nPlease select an option from the main menu: \n[1] Start Classic Game\n[2] Start Sandbox Game\n[3] Display high scores\nOption: ");
+			System.out.print("\n[1] Start Classic Game\n[2] Start Sandbox Game\n[3] Display High Scores\nPlease select an option above:  ");
 			userInput = input.nextLine();
-//            if(userInput.equals("1")) {
-//                create();
-//            } else if(userInput.equals("2")) {
-//                createSandBox();
-//            } else {
-//                userInput = "0";
-//            }
-//			 ***delete later***
 			switch (userInput) {
 			case "1":
 				create();
@@ -64,6 +54,11 @@ public class Game {
 
 		// Runs game until a player wins or game is terminated
 		while (player1.getPosition() < 99 && player2.getPosition() < 99) {
+			if (((count % 2) + 1) == 1) {
+				System.out.println("It's " + player1.getName() + "'s turn!");
+			} else {
+				System.out.println("It's " + player2.getName() + "'s turn!");
+			}
 			System.out.print("Enter any key to roll the dice! Type 'quit' to stop the game.\nEnter key: ");
 			userInput = input.nextLine();
 			if (userInput.equalsIgnoreCase("quit")) {
@@ -77,13 +72,13 @@ public class Game {
 		// Records scores of player who won
 		if (player1.getPosition() == 99) {
 			player1.setScore(count);
-//			scoreboard.addPlayer(player1);
 			scoreboard.updateTopScores(player1);
 		} else if (player2.getPosition() == 99) {
 			player2.setScore(count);
-//			scoreboard.addPlayer(player2);
 			scoreboard.updateTopScores(player2);
 		}
+		
+		System.out.printf("\nScores\n%s --- %d\n%s --- %d\n", player1.getName(), player1.getScore(), player2.getName(), player2.getScore());
 
 		// Updates and displays high scores
 		scoreboard.saveScores();
@@ -92,14 +87,6 @@ public class Game {
 	}
 
 	public static void create() {
-
-		// Read txt file and print out top 5 player score
-//		scoreboard = new Scoreboard();
-//		scoreboard.loadScores();
-//		scoreboard.sortTopScore();
-//		System.out.println(scoreboard.toString());
-//		 ***delete later***
-
 		// Asks for both players' name
 		System.out.print("\nEnter name for Player 1: ");
 		player1Name = input.nextLine();
@@ -112,19 +99,10 @@ public class Game {
 		river = new River(player1, player2);
 
 		// Display river view
-//		System.out.println(river.draw());
-		System.out.printf("\n%s\n\n", river.draw());
+		System.out.printf("%s\n", river.draw());
 	}
 
 	public static void createSandBox() {
-
-		// Read txt file and print out top 5 player score
-//		scoreboard = new Scoreboard();
-//		scoreboard.loadScores();
-//		scoreboard.sortTopScore();
-//		System.out.println(scoreboard.toString());
-//		 ***delete later***
-
 		// Asks for both players' name
 		System.out.print("\nEnter name for Player 1: ");
 		player1Name = input.nextLine();
@@ -163,33 +141,35 @@ public class Game {
 		count += 1;
 
 		if (turn == 1) {
-			System.out.println("It's " + player1.getName() + "'s turn! Moving boat forward by " + movement + " tile" + (movement == 1 ? "..." : "s..."));
+			System.out.println("Moving boat forward by " + movement + " tile" + (movement == 1 ? "..." : "s..."));
 			player1.move(movement);
 			if (player1.getPosition() >= 99) {
 				player1.setPosition(99);
 				System.out.println(river.draw());
-				System.out.println(player1.getName() + " wins!");
+				System.out.println(player1.getName() + " has reached the end of the river! " + player1.getName() + " wins!\nThanks for playing!");
 			} else {
 				river.check(player1);
 				if (player1.getHP() > 0) {
 					System.out.println(river.draw());
 				} else {
-					player2.setPosition(99); // Declare Player 2 as winner when Player 1's boat reaches below 0 hitpoints
+					player2.setPosition(99); // Declare Player 2 as winner when Player 1's boat reaches 0 or less hitpoints
+					System.out.println(player2.getName() + " wins!");
 				}
 			}
 		} else if (turn == 2) {
-			System.out.println("It's " + player2.getName() + "'s turn! Moving boat forward by " + movement + " tile" + (movement == 1 ? "..." : "s..."));
+			System.out.println("Moving boat forward by " + movement + " tile" + (movement == 1 ? "..." : "s..."));
 			player2.move(movement);
 			if (player2.getPosition() >= 99) {
 				player2.setPosition(99);
 				System.out.println(river.draw());
-				System.out.println(player2.getName() + " wins!");
+				System.out.println(player2.getName() + " has reached the end of the river! " + player2.getName() + " wins!\nThanks for playing!");
 			} else {
 				river.check(player2);
 				if (player2.getHP() > 0) {
 					System.out.println(river.draw());
 				} else {
-					player1.setPosition(99); // Declare Player 1 as winner when Player 2's boat reaches below 0 hitpoints
+					player1.setPosition(99); // Declare Player 1 as winner when Player 2's boat reaches 0 or less hitpoints
+					System.out.println(player1.getName() + " wins!");
 				}
 			}
 		}

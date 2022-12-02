@@ -2,6 +2,7 @@ package com.assignment.object;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.lang.Math;
 
 public class River {
 	// Attributes
@@ -76,8 +77,8 @@ public class River {
 	}
 
 	public String draw() {
-		// Resets paper to blank
-		String paper = "";
+		// Resets mapView to blank
+		String mapView = "";
 		riverMap.replaceAll(x -> " ~ "); // Replaces all tiles in map as blank
 		entityList.forEach(entity -> {
 			riverMap.set(entity.getPosition(), entity.toString());
@@ -93,11 +94,11 @@ public class River {
 			riverMap.set(player2.getPosition(), player2.toString());
 		}
 
-		// Sets paper to reflect view of riverMap
+		// Sets mapView to reflect player view of riverMap
 		for (int i = 0; i < riverMap.size(); i++) {
-			paper += riverMap.get(i);
+			mapView += riverMap.get(i);
 		}
-		return paper;
+		return String.format("\n%s\n", mapView);
 	}
 
 	public void check(Player player) {
@@ -108,26 +109,26 @@ public class River {
 			for (int i = 0; i < entityList.size(); i++) {
 				if (player.getPosition() == entityList.get(i).getPosition()) {
 					if (entityList.get(i) instanceof Current) {
-						System.out.printf("%s has landed on a %s %s!", player.getName(), ((Current)entityList.get(i)).getLevel(), "current"); // ***change this line when adding custom messages
+						System.out.printf("%s has landed on a %s current! Advancing forward by %d tiles...\n", player.getName(), ((Current)entityList.get(i)).getLevel(), ((Current)entityList.get(i)).getMovement()); // ***change this line when adding custom messages
 						if (player.getPosition() + ((Current)entityList.get(i)).getMovement() < 100) {
 							player.move(((Current)entityList.get(i)).getMovement());
 						} else {
 							player.setPosition(99); // Sets player position to last tile to avoid out of bounds
 						}
 					} else if (entityList.get(i) instanceof Trap) {
-						System.out.printf("%s has landed on a %s %s!", player.getName(), ((Trap)entityList.get(i)).getLevel(), "trap"); // ***change this line when adding custom messages
+						System.out.printf("%s has landed on a %s trap! Retreating %d tiles...\n", player.getName(), ((Trap)entityList.get(i)).getLevel(), Math.abs(((Trap)entityList.get(i)).getMovement())); // ***change this line when adding custom messages
 						player.damage();
-						System.out.printf("%s's boat has %d hitpoints left.", player, player.getHP());
-						if (player.getHP() < 0) {
+						System.out.printf("%s's boat has %d hitpoints left.\n", player.getName(), player.getHP());
+						if (player.getHP() <= 0) {
 							player.setPosition(0); // Sets player position to first tile as boat has no hitpoints remaining and player has lost
-							System.out.printf("%s's boat has lost all its hitpoints!", player.getName());
+							System.out.printf("%s's boat has lost all its hitpoints!\n", player.getName());
 						} else {
 							player.move(((Trap)entityList.get(i)).getMovement());
 						}
 					} else if (entityList.get(i) instanceof Shipyard) {
-						System.out.printf("%s has landed on a %s!", player.getName(), "shipyard"); // ***change this line when adding custom messages
+						System.out.printf("%s has landed on a shipyard! Repairing boat...\n", player.getName()); // ***change this line when adding custom messages
 						player.repair();
-						System.out.printf("%s's boat currently has %d hitpoints.", player, player.getHP());
+						System.out.printf("%s's boat currently has %d hitpoints.\n", player.getName(), player.getHP());
 						visitedShipyard = true;
 					}
 				}

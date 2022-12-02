@@ -69,7 +69,10 @@ public class Player {
 	}
 
 	public void damage() {
-		hp -= 15;
+		hp -= 30;
+		if (hp < 0) {
+			hp = 0;
+		}
 	}
 
 	public void repair() {
@@ -83,5 +86,4 @@ public class Player {
 	public String toString() {
 		return String.format(" P%d ", this.id);
 	}
-
 }
