@@ -10,6 +10,10 @@ public class Player {
 	private int hp;
 
 	// Constructor
+	public Player() {
+		
+	}
+	
 	public Player(int id, String name) {
 		this.id = id;
 		this.name = name;

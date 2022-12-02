@@ -30,12 +30,12 @@ public class Game {
 	public static void main(String[] args) {
 		scoreboard = new Scoreboard();
 		scoreboard.loadScores();
-		scoreboard.sortTopScore();
+		scoreboard.sortTopScores();
 
 		userInput = "0";
 		System.out.println("Welcome to Boat Race!");
 		while (userInput.equals("0")) {
-			System.out.println("Please select an option from the main menu: \n1. Start Classic Game\n2. Start Sandbox Game\n3. Display high scores");
+			System.out.print("\nPlease select an option from the main menu: \n[1] Start Classic Game\n[2] Start Sandbox Game\n[3] Display high scores\nOption: ");
 			userInput = input.nextLine();
 //            if(userInput.equals("1")) {
 //                create();
@@ -54,6 +54,7 @@ public class Game {
 				break;
 			case "3":
 				System.out.println(scoreboard.toString());
+				userInput = "0";
 				break;
 			default:
 				userInput = "0";
@@ -63,10 +64,10 @@ public class Game {
 
 		// Runs game until a player wins or game is terminated
 		while (player1.getPosition() < 99 && player2.getPosition() < 99) {
-			System.out.println("Press any key to roll the dice! Type 'quit' to stop the game.");
+			System.out.print("Enter any key to roll the dice! Type 'quit' to stop the game.\nEnter key: ");
 			userInput = input.nextLine();
 			if (userInput.equalsIgnoreCase("quit")) {
-				System.out.println("Terminating game...");
+				System.out.println("\nTerminating game...\nThanks for playing!");
 				break;
 			} else {
 				play((count % 2) + 1);
@@ -76,17 +77,18 @@ public class Game {
 		// Records scores of player who won
 		if (player1.getPosition() == 99) {
 			player1.setScore(count);
-			scoreboard.addPlayer(player1);
+//			scoreboard.addPlayer(player1);
+			scoreboard.updateTopScores(player1);
 		} else if (player2.getPosition() == 99) {
 			player2.setScore(count);
-			scoreboard.addPlayer(player2);
+//			scoreboard.addPlayer(player2);
+			scoreboard.updateTopScores(player2);
 		}
 
 		// Updates and displays high scores
 		scoreboard.saveScores();
-		scoreboard.sortTopScore();
+		scoreboard.sortTopScores();
 		System.out.println(scoreboard.toString());
-
 	}
 
 	public static void create() {
@@ -110,7 +112,8 @@ public class Game {
 		river = new River(player1, player2);
 
 		// Display river view
-		System.out.println(river.draw());
+//		System.out.println(river.draw());
+		System.out.printf("\n%s\n\n", river.draw());
 	}
 
 	public static void createSandBox() {
