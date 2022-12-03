@@ -13,8 +13,7 @@ public class Current extends Entity {
 			if (new Random().nextBoolean()) {
 				level = "strong";
 				movement = 5;
-			}
-			else {
+			} else {
 				level = "weak";
 				movement = 3;
 			}

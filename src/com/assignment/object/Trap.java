@@ -13,8 +13,7 @@ public class Trap extends Entity{
 			if (new Random().nextBoolean()) {
 				level = "strong";
 				movement = -4;
-			}
-			else {
+			} else {
 				level = "weak";
 				movement = -2;
 			}

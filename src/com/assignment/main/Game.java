@@ -15,7 +15,7 @@ public class Game {
 	public static Player player2;
 	public static String player1Name;
 	public static String player2Name;
-	public static Scoreboard scoreboard = new Scoreboard();
+	public static Scoreboard scoreboard;
 
 	public static int currentAmount;
 	public static int trapAmount;
@@ -23,19 +23,51 @@ public class Game {
 
 	public static boolean isSandboxMode = false;
 
-	static String userInput;
+	static String userInput = "0";
 
 	static int count = 0;
 	static int movement;
 
 	public static void main(String[] args) {
+		System.out.printf(""
+				+"\n"
+				+ " ░█  ░█ ░█▀▀▀ ░█    ░█▀▀█ ░█▀▀█ ░█▀▄▀█ ░█▀▀▀ 　 ▀▀█▀▀ ░█▀▀█ 　 ░█▀▀█ ░█ ░█ ░█▀▀█  \n"
+				+ " ░█░█░█ ░█▀▀▀ ░█    ░█    ░█  █ ░█░█░█ ░█▀▀▀ 　  ░█   ░█  █ 　 ░█  █ ░█ ░█ ░█▄▄▀  \n"
+				+ " ░█▄▀▄█ ░█▄▄▄ ░█▄▄█ ░█▄▄█ ░█▄▄█ ░█  ░█ ░█▄▄▄ 　  ░█   ░█▄▄█ 　 ░█▄▄█  ▀▄▄▀ ░█ ░█\n\n"
+
+				+" ▒█▀▀█ ▒█▀▀█ ░█▀▀█ ▀▀█▀▀ 　 ▒█▀▀█ ░█▀▀█ ▒█▀▀█ ▀█▀ ▒█▄ ▒█ ▒█▀▀█ 　 ▒█▀▀█ ░█▀▀█ ▒█▀▄▀█ ▒█▀▀▀ 　 █ \n"
+				+" ▒█▀▀▄ ▒█  █ ▒█▄▄█  ▒█   　 ▒█▄▄▀ ▒█▄▄█ ▒█     █  ▒█▒█▒█ ▒█ ▄▄ 　 ▒█ ▄▄ ▒█▄▄█ ▒█▒█▒█ ▒█▀▀▀ 　 ▀ \n"
+				+" ▒█▄▄█ ▒█▄▄█ ▒█ ▒█  ▒█   　 ▒█  █ ▒█ ▒█ ▒█▄▄█ ▄█▄ ▒█  ▀█ ▒█▄▄█ 　 ▒█▄▄█ ▒█ ▒█ ▒█░ ▒█ ▒█▄▄▄ 　 ▄\r\n"
+				+ "\n\n"
+				+ "  ───│────────▄▄───▄▄───▄▄───▄▄───────│────\r\n"
+				+ "  ───▌────────▒▒───▒▒───▒▒───▒▒───────▌────\r\n"
+				+ "  ───▌──────▄▀█▀█▀█▀█▀█▀█▀█▀█▀█▀▄─────▌────\r\n"
+				+ "  ───▌────▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄───▋────\r\n"
+				+ "  ▀██████████████████████████████████████▄─\r\n"
+				+ "  ──▀███████████████████████████████████▀──\r\n"
+				+ "  ─────▀██████████████████████████████▀────\r\n"
+				+ "  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒\r\n"
+				+ "  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒\r\n"
+				+ "  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒\n"
+				+ "  \r\n"
+				+ " ________________________________________________________________________________________\n"
+				+ " ________________________________________________________________________________________\n\n"
+				+ "    MADE BY: GROUP 10 \n\n"
+				+ " 1. TUNG QI YONG || 22022750\n 2. LAW CHII YUEN || 22007777 \n"
+				+ " 3. TOH KAR MING || 21091137\n 4. SYEHRRAN A/L ARULSAMY || 22000608\n"
+				+ " 5. SUGUMARAN A/L THIAGARAJAN || 18117069\n\n"
+				+ " ________________________________________________________________________________________\n"
+				+ " ________________________________________________________________________________________\n\n"
+		);
+		
 		scoreboard = new Scoreboard();
-		userInput = "0";
-		System.out.println("Welcome to Boat Race!");
-		System.out.println("The goal of the game is to be the first boat to reach the end of the river, or be the last boat standing!");
 		while (userInput.equals("0")) {
-			System.out.print("\n[1] Start Classic Game\n[2] Start Sandbox Game\n[3] Display High Scores\nPlease select an option above:  ");
+			System.out.print("[1] Start Classic Game\n[2] Start Sandbox Game\n[3] Display High Scores\n[4] How To Play\nPlease select an option above: ");
 			userInput = input.nextLine();
+			System.out.println("\n"
+					+ " ________________________________________________________________________________________\n"
+					+ " ________________________________________________________________________________________\n"
+					);
 			switch (userInput) {
 			case "1":
 				create();
@@ -46,6 +78,23 @@ public class Game {
 				break;
 			case "3":
 				System.out.println(scoreboard.toString());
+				System.out.println(""
+						+ " ________________________________________________________________________________________\n"
+						+ " ________________________________________________________________________________________\n\n"
+						);
+				userInput = "0";
+				break;
+			case "4":
+				System.out.println("\nHow To Play:\n");
+				System.out.println("1 - The goal of the game is to be the first boat to reach the end of the river, or be the last boat standing!");
+				System.out.println("2 - Each player takes turn to move their boats forward by rolling a dice.");
+				System.out.println("3 - Every boat has a set amount of hitpoints. Once a boat loses all its hitpoints, the player loses.");
+				System.out.println("4 - Currents push boats forward a few tiles, Traps bring boats back a few tiles, and Shipyards repair boats.");
+				System.out.println("    Bon voyage!");
+				System.out.println("\n"
+						+ " ________________________________________________________________________________________\n"
+						+ " ________________________________________________________________________________________\n\n"
+						);
 				userInput = "0";
 				break;
 			default:
@@ -84,7 +133,7 @@ public class Game {
 			}
 		}
 
-		System.out.printf("\nScores (Moves Taken)\n%s --- %d\n%s --- %d\n", player1.getName(), player1.getScore(), player2.getName(), player2.getScore());
+		System.out.printf("\nScores (Moves Taken)\n\n%s ----- %d\n%s ----- %d\n", player1.getName(), player1.getScore(), player2.getName(), player2.getScore());
 
 		if (isSandboxMode) {
 			System.out.println("\nScores in Sandbox Mode are not eligible for the leaderboard.");
