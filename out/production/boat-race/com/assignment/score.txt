@@ -1,6 +1,5 @@
-cy 40
-coming 42
-sugu 45
-syehrran 47
-morris 50
-yong 37
+A 62
+B 57
+C 48
+D 51
+E 83
