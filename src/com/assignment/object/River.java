@@ -2,155 +2,150 @@ package com.assignment.object;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.lang.Math;
 
 public class River {
-    /*
-    * This is used as a Map class
-    * */
+	// Attributes
+	private ArrayList<String> riverMap;
+	private ArrayList<Integer> entityPositionList;
+	private ArrayList<Entity> entityList;
 
-    //Attribute
-    private ArrayList<String> riverMap;
-    private ArrayList<Integer> entityPositionList;
-    private ArrayList<Entity> entityList;
+	private Player player1;
+	private Player player2;
 
-    private Player player1;
-    private Player player2;
+	private int randomEntityPosition;
 
-    private int randomEntityP;
+	Random rd = new Random();
 
-    Random rd = new Random();
+	// Constructors
+	public River(Player player1, Player player2) {
+		riverMap = new ArrayList<String>();
+		entityPositionList = new ArrayList<Integer>();
+		entityList = new ArrayList<Entity>();
 
-    //Constructor
-    public River(Player player1, Player player2) {
-        riverMap = new ArrayList();
-        entityPositionList = new ArrayList<Integer>();
-        entityList = new ArrayList<Entity>();
+		this.player1 = player1;
+		this.player2 = player2;
 
-        this.player1 = player1;
-        this.player2 = player2;
+		// Creates map template
+		for (int i = 0; i < 100; i++) {
+			riverMap.add(" ~ ");
+		}
 
-        //Create a map
-        for (int i = 0; i < 100; i++) {
-            riverMap.add(" ~ ");
-        }
+		// Generates traps
+		for (int j = 0; j < 10; j++) {
+			entityList.add(new Trap(generateRandomPosition()));
+		}
 
-        //Generate trap
-        for (int j = 0; j < 10; j++) {
-            entityList.add(new Trap(generateRandomPosition()));
-        }
+		// Generates currents
+		for (int k = 0; k < 10; k++) {
+			entityList.add(new Current(generateRandomPosition()));
+		}
 
-        //Generate current
-        for (int k = 0; k < 10; k++) {
-            entityList.add(new Current(generateRandomPosition()));
-        }
+		// Generates shipyards
+		for (int l = 0; l < 5; l++) {
+			entityList.add(new Shipyard(generateRandomPosition()));
+		}
+	}
 
-        //Generate Shipyard
-        for (int l = 0; l < 5; l++) {
-            entityList.add(new Shipyard(generateRandomPosition()));
-        }
-    }
-    public River(Player player1, Player player2, int currentAmount, int trapAmount, int shipyardAmount) {
-        riverMap = new ArrayList();
-        entityPositionList = new ArrayList<Integer>();
-        entityList = new ArrayList<Entity>();
+	public River(Player player1, Player player2, int currentAmount, int trapAmount, int shipyardAmount) {
+		riverMap = new ArrayList<String>();
+		entityPositionList = new ArrayList<Integer>();
+		entityList = new ArrayList<Entity>();
 
-        this.player1 = player1;
-        this.player2 = player2;
+		this.player1 = player1;
+		this.player2 = player2;
 
-        //Create a map
-        for (int i = 0; i < 100; i++) {
-            riverMap.add(" ~ ");
-        }
+		// Creates map template
+		for (int i = 0; i < 100; i++) {
+			riverMap.add(" ~ ");
+		}
 
-        //Generate trap
-        for (int j = 0; j < currentAmount; j++) {
-            entityList.add(new Current(generateRandomPosition()));
-        }
+		// Generates traps
+		for (int j = 0; j < currentAmount; j++) {
+			entityList.add(new Current(generateRandomPosition()));
+		}
 
-        //Generate current
-        for (int k = 0; k < trapAmount; k++) {
-            entityList.add(new Trap(generateRandomPosition()));
-        }
+		// Generates currents
+		for (int k = 0; k < trapAmount; k++) {
+			entityList.add(new Trap(generateRandomPosition()));
+		}
 
-        //Generate Shipyard
-        for (int l = 0; l < shipyardAmount; l++) {
-            entityList.add(new Shipyard(generateRandomPosition()));
-        }
-    }
+		// Generates shipyards
+		for (int l = 0; l < shipyardAmount; l++) {
+			entityList.add(new Shipyard(generateRandomPosition()));
+		}
+	}
 
-    public String draw() {
-        //Erase and reset string for map
-        String paper = "";
-        riverMap.replaceAll(x -> " ~ ");    //Water(Empty)
+	public String draw() {
+		// Resets mapView to blank
+		String mapView = "";
+		riverMap.replaceAll(x -> " ~ "); // Replaces all tiles in map as blank
+		entityList.forEach(entity -> {
+			riverMap.set(entity.getPosition(), entity.toString());
+		});
 
-        entityList.forEach(entity -> {
-            riverMap.set(entity.getPosition(), entity.toString());
-        });
+		// Sets both players on the map
+		if (player1.getPosition() == player2.getPosition()) {
+			riverMap.set(player1.getPosition(), " P1/P2 ");
+		} else if (player1.getPosition() > 100 || player2.getPosition() > 100) {
+			System.out.println("A boat has crossed the last tile!");
+		} else {
+			riverMap.set(player1.getPosition(), player1.toString());
+			riverMap.set(player2.getPosition(), player2.toString());
+		}
 
-        //Put the player on the map
-        if (player1.getPosition() == player2.getPosition()) {
-            riverMap.set(player1.getPosition(), "[P1/P2]");
-        } else if (player1.getPosition() > 100 || player2.getPosition() > 100) {
-            System.out.println("You Won");
-        }else {
-            riverMap.set(player1.getPosition(), player1.toString());
-            riverMap.set(player2.getPosition(), player2.toString());
-        }
+		// Sets mapView to reflect player view of riverMap
+		for (int i = 0; i < riverMap.size(); i++) {
+			mapView += riverMap.get(i);
+		}
+		return String.format("\n%s\n", mapView);
+	}
 
-        //Draw on paper
-        for (int i = 0; i < riverMap.size(); i++) {
-            paper += riverMap.get(i);
-        }
+	public void check(Player player) {
+		boolean visitedShipyard = false;
+		
+		while (entityPositionList.contains(player.getPosition()) && !visitedShipyard) {
 
-        return paper;
-    }
+			for (int i = 0; i < entityList.size(); i++) {
+				if (player.getPosition() == entityList.get(i).getPosition()) {
+					if (entityList.get(i) instanceof Current) {
+						System.out.printf("%s has landed on a %s current! Advancing forward by %d tiles...\n", player.getName(), ((Current)entityList.get(i)).getLevel(), ((Current)entityList.get(i)).getMovement()); // ***change this line when adding custom messages
+						if (player.getPosition() + ((Current)entityList.get(i)).getMovement() < 100) {
+							player.move(((Current)entityList.get(i)).getMovement());
+						} else {
+							player.setPosition(99); // Sets player position to last tile to avoid out of bounds
+						}
+					} else if (entityList.get(i) instanceof Trap) {
+						System.out.printf("%s has landed on a %s trap! Retreating %d tiles...\n", player.getName(), ((Trap)entityList.get(i)).getLevel(), Math.abs(((Trap)entityList.get(i)).getMovement())); // ***change this line when adding custom messages
+						player.damage();
+						System.out.printf("%s's boat has %d hitpoints left.\n", player.getName(), player.getHP());
+						if (player.getHP() <= 0) {
+							player.setPosition(0); // Sets player position to first tile as boat has no hitpoints remaining and player has lost
+							System.out.printf("%s's boat has lost all its hitpoints!\n", player.getName());
+						} else {
+							player.move(((Trap)entityList.get(i)).getMovement());
+						}
+					} else if (entityList.get(i) instanceof Shipyard) {
+						System.out.printf("%s has landed on a shipyard! Repairing boat...\n", player.getName()); // ***change this line when adding custom messages
+						player.repair();
+						System.out.printf("%s's boat currently has %d hitpoints.\n", player.getName(), player.getHP());
+						visitedShipyard = true;
+					}
+				}
+			}
+		}
+	}
 
-    public void check(Player player) {
+	public int generateRandomPosition() {
+		randomEntityPosition = rd.nextInt(riverMap.size());
 
-        boolean visitedShipyard = false;
-        while (entityPositionList.contains(player.getPosition()) && !visitedShipyard) {
+		// Generates a new position if position generated is already taken, or one of first 10 tiles, or one of last 10 tiles      
+		while (entityPositionList.contains(randomEntityPosition) || randomEntityPosition < 10 || randomEntityPosition > riverMap.size() - 10) {
+			randomEntityPosition = rd.nextInt(riverMap.size());
+		}
 
-            for (int i = 0; i < entityList.size(); i++) {
-                if (player.getPosition() == entityList.get(i).getPosition()) {
-                    if (entityList.get(i) instanceof Current) {
-                        System.out.printf("%s hit a %s %s\n", player.getName(), ((Current) entityList.get(i)).getLevel(), "Current");
-                        if (player.getPosition() + ((Current) entityList.get(i)).getMovement() < 100) {
-                            player.move(((Current) entityList.get(i)).getMovement());
-                        } else {
-                            player.setPosition(99);    //set to last position to avoid out of index
-                        }
-                    } else if (entityList.get(i) instanceof Trap) {
-                        System.out.printf("%s hit a %s %s\n", player.getName(), ((Trap) entityList.get(i)).getLevel(), "Trap");
-                        player.damage();
-                        System.out.printf("%s Hp: %d\n", player, player.getHP());
-                        if (player.getHP() < 0) {
-                            player.setPosition(0);    //To avoid the while loop keep looping
-                            System.out.printf("GG, %s lose\n", player);
-                        } else {
-                            player.move(((Trap) entityList.get(i)).getMovement());
-                        }
-                    } else if (entityList.get(i) instanceof Shipyard) {
-                        System.out.printf("%s hit a %s\n", player.getName(), "Shipyard");
-                        player.repair();
-                        System.out.printf("%s Hp: %d\n", player, player.getHP());
-                        visitedShipyard = true;
-                    }
-                }
-            }
-        }
-    }
-
-    public int generateRandomPosition() {
-
-        randomEntityP = rd.nextInt(riverMap.size());
-
-        // to avoid entity overlapping and the starting point.
-        while (entityPositionList.contains(randomEntityP) || randomEntityP < 10 || randomEntityP > riverMap.size()- 10) {
-            randomEntityP = rd.nextInt(riverMap.size());
-        }
-
-        //save the occurred entity position for checking purposes
-        entityPositionList.add(randomEntityP);
-        return randomEntityP;
-    }
+		// Saves position generated to be referenced later
+		entityPositionList.add(randomEntityPosition);
+		return randomEntityPosition;
+	}
 }

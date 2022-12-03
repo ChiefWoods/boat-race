@@ -6,19 +6,18 @@ public class Trap extends Entity{
 	private int movement;
 	private String level;
 	
-	//constructor
+		// Constructor
 		public Trap(int position) {
 			super(position);
 			
 			if (new Random().nextBoolean()) {
-				level = "Strong";
+				level = "strong";
 				movement = -4;
 			}
 			else {
-				level = "Weak";
+				level = "weak";
 				movement = -2;
 			}
-			
 		}
 		
 		public int getMovement() {
@@ -29,7 +28,6 @@ public class Trap extends Entity{
 			this.movement = movement;
 		}
 
-
 		public String getLevel() {
 			return level;
 		}
@@ -39,6 +37,6 @@ public class Trap extends Entity{
 		}
 
 		public String toString() {
-			return String.format("[#]");
+			return String.format(" # ");
 		}
 }

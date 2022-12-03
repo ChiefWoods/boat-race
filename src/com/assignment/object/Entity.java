@@ -3,12 +3,11 @@ package com.assignment.object;
 public class Entity {
 	private int position;
 	
-	//Constructor
+	// Constructor
 	public Entity(int position) {
 		this.position = position;
 	}
 	
-	//set & get
 	public void setPosition(int position) {
 		this.position = position;
 	}
@@ -18,6 +17,6 @@ public class Entity {
 	}
 	
 	public String toString() {
-		return String.format("[-]");
+		return String.format(" ~ ");
 	}
 }
