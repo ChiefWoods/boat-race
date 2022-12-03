@@ -143,6 +143,10 @@ public class Game {
 		scoreboard.saveScores();
 		scoreboard.sortTopScores();
 		System.out.println(scoreboard.toString());
+		
+		if (input != null) {
+			input.close();
+		}
 	}
 
 	public static void create() {
