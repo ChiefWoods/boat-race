@@ -37,7 +37,7 @@ public class River {
 		}
 
 		// Generates currents
-		for (int k = 0; k < 10; k++) {
+		for (int k = 0; k < 7; k++) {
 			entityList.add(new Current(generateRandomPosition()));
 		}
 

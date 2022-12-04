@@ -9,24 +9,24 @@ import java.util.Scanner;
 
 public class Game {
 	// Attributes
-	public static Scanner input = new Scanner(System.in);
-	public static River river;
-	public static Player player1;
-	public static Player player2;
-	public static String player1Name;
-	public static String player2Name;
-	public static Scoreboard scoreboard;
+	private static Scanner input = new Scanner(System.in);
+	private static River river;
+	private static Player player1;
+	private static Player player2;
+	private static String player1Name;
+	private static String player2Name;
+	private static Scoreboard scoreboard;
 
-	public static int currentAmount;
-	public static int trapAmount;
-	public static int shipyardAmount;
+	private static int currentAmount;
+	private static int trapAmount;
+	private static int shipyardAmount;
 
-	public static boolean isSandboxMode = false;
+	private static boolean isSandboxMode = false;
 
-	static String userInput = "0";
+	private static String userInput = "0";
 
-	static int count = 0;
-	static int movement;
+	private static int count = 0;
+	private static int movement;
 
 	public static void main(String[] args) {
 		System.out.printf(""
@@ -216,6 +216,7 @@ public class Game {
 					System.out.println(river.draw());
 				} else {
 					player2.setPosition(99); // Declare Player 2 as winner when Player 1's boat reaches 0 or less hitpoints
+					System.out.println(river.draw());
 					System.out.println(player2.getName() + " wins!");
 				}
 			}
@@ -232,6 +233,7 @@ public class Game {
 					System.out.println(river.draw());
 				} else {
 					player1.setPosition(99); // Declare Player 1 as winner when Player 2's boat reaches 0 or less hitpoints
+					System.out.println(river.draw());
 					System.out.println(player1.getName() + " wins!");
 				}
 			}
