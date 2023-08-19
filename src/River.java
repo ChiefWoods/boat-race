@@ -5,12 +5,9 @@ public class River {
 	private ArrayList<String> riverMap;
 	private ArrayList<Integer> entityPositionList;
 	private ArrayList<Entity> entityList;
-
 	private Player player1;
 	private Player player2;
-
 	private int randomEntityPosition;
-
 	Random rd = new Random();
 
 	public River(Player player1, Player player2) {
@@ -72,7 +69,8 @@ public class River {
 	}
 
 	public String draw() {
-		String mapView = ""; // Resets mapView to blank
+		// Resets mapView to blank
+		String mapView = "";
 		riverMap.replaceAll(x -> " ~ "); // Replaces all tiles in map as blank
 		entityList.forEach(entity -> {
 			riverMap.set(entity.getPosition(), entity.toString());
@@ -88,7 +86,7 @@ public class River {
 			riverMap.set(player2.getPosition(), player2.toString());
 		}
 
-		// Sets mapView to reflect player view of riverMap
+		// Sets mapView to reflect view of riverMap
 		for (int i = 0; i < riverMap.size(); i++) {
 			mapView += riverMap.get(i);
 		}
@@ -99,7 +97,6 @@ public class River {
 		boolean visitedShipyard = false;
 		
 		while (entityPositionList.contains(player.getPosition()) && !visitedShipyard) {
-
 			for (int i = 0; i < entityList.size(); i++) {
 				if (player.getPosition() == entityList.get(i).getPosition()) {
 					if (entityList.get(i) instanceof Current) {
